@@ -1,0 +1,42 @@
+name: ci
+
+# Every push: lint the designs, run all simulations, prove the formal properties, and prove the
+# gate still rejects every known-bad fix. No model and no API key involved.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      ICARUS_BIN_DIR: /usr/bin   # cocotb simulates with Ubuntu's Icarus (see the install step)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: YosysHQ/setup-oss-cad-suite@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      # OSS CAD Suite's binaries are wrappers that point Python at its own bundled copy, which breaks
+      # cocotb's embedded interpreter. Simulation uses Ubuntu's Icarus; everything else uses the suite.
+      - name: Install cocotb and Icarus
+        run: |
+          pip install -r requirements.txt
+          sudo apt-get update -q && sudo apt-get install -y -q iverilog
+      - name: Tool versions
+        run: verilator --version; yosys -V; /usr/bin/iverilog -V | head -1
+      - name: Lint (rtl/ must be clean)
+        run: make lint
+      - name: Lint gallery (each file must trigger its rule)
+        run: make gallery
+      - name: Simulation (cocotb + Icarus)
+        run: make test
+      - name: Demo targets still behave (they are lint-dirty on purpose)
+        run: make test-demo
+      - name: Formal (SymbiYosys)
+        run: make formal
+      - name: Gate self-test
+        run: make selftest

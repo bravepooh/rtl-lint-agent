@@ -1,0 +1,9 @@
+--- a/sat_add.sv
++++ b/sat_add.sv
+@@ -9,5 +9,5 @@
+   logic [8:0] full_sum;
+   assign full_sum = a + b;
+   assign sat = full_sum[8];
+-  assign sum = sat ? 8'hFF : full_sum;
++  assign sum = sat ? 8'hFF : full_sum[7:0];
+ endmodule

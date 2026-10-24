@@ -1,0 +1,18 @@
+[tasks]
+prove
+cover
+
+[options]
+prove: mode prove
+cover: mode cover
+cover: depth 24
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal sync_fifo.sv
+prep -top sync_fifo
+
+[files]
+../rtl/sync_fifo.sv

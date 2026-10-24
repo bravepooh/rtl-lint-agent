@@ -1,0 +1,15 @@
+{
+ "top": "prio_enc",
+ "checks": {
+  "lint": "pass",
+  "waivers": "pass",
+  "ports": "pass",
+  "tests": "pass",
+  "equivalence": "not proven"
+ },
+ "warnings_before": 2,
+ "warnings_after": 0,
+ "verdict": "review",
+ "reason": "tests pass but formal equivalence not proven: behavior changed somewhere the tests do not check",
+ "equiv_log": "Warning: Latch inferred for signal `\\prio_enc.\\idx' from process `\\prio_enc.$proc$/var/folders/hx/c7c0mftn6wb_jsr0khywq8ch0000gn/T/tmp4yzvzmht/gold.sv:8$3': $auto$proc_dlatch.cc:559:proc_dlatch$119\nERROR: Found 3 unproven $equiv cells in 'equiv_status -assert'."
+}

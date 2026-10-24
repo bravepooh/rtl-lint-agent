@@ -1,0 +1,56 @@
+name: agent
+
+# Manual: run the AI fix agent over demo/ and open a pull request with the fixes the gate kept.
+# Needs the ANTHROPIC_API_KEY repository secret. Fixes sent to review or rejected are not applied;
+# their candidates and verdicts are uploaded as a build artifact.
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: attempts per file
+        default: "1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: YosysHQ/setup-oss-cad-suite@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          pip install -r requirements.txt
+          sudo apt-get update -q && sudo apt-get install -y -q iverilog
+      - name: Run agent
+        env:
+          AGENT_BACKEND: anthropic
+          ICARUS_BIN_DIR: /usr/bin
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agent/fix.py demo/ --runs ${{ inputs.runs }} --apply | tee agent-output.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-run
+          path: runs/
+      - name: Open pull request with kept fixes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet demo/; then echo "No kept fixes."; exit 0; fi
+          branch="agent/fixes-${{ github.run_id }}"
+          git config user.name "rtl-lint-agent"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add demo/*.sv
+          git commit -m "agent: lint fixes kept by the gate"
+          git push origin "$branch"
+          gh pr create --title "Agent lint fixes (run ${{ github.run_id }})" \
+            --body "Only fixes with verdict kept (lint improved, interface unchanged, tests pass, formally equivalent). Full log in the agent-run artifact." \
+            --base main --head "$branch"

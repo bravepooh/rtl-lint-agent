@@ -1,0 +1,16 @@
+--- a/signed_mac.sv
++++ b/signed_mac.sv
+@@ -10,10 +10,12 @@
+   output logic signed [19:0] acc
+ );
+   logic signed [15:0] prod;
++  logic signed [19:0] prod_ext;
+   assign prod = a * b;
++  assign prod_ext = 20'(prod);
+   always_ff @(posedge clk or negedge rst_n) begin
+     if (!rst_n)   acc <= '0;
+     else if (clr) acc <= '0;
+-    else if (en)  acc <= acc + prod;
++    else if (en)  acc <= acc + prod_ext;
+   end
+ endmodule

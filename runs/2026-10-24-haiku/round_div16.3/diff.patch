@@ -1,0 +1,9 @@
+--- a/round_div16.sv
++++ b/round_div16.sv
+@@ -4,5 +4,5 @@
+   input  logic [11:0] x,
+   output logic [8:0]  q
+ );
+-  assign q = (x + 8) >> 4;
++  assign q = 9'((13'(x) + 13'd8) >> 4);
+ endmodule

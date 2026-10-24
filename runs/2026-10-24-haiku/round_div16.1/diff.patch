@@ -1,0 +1,12 @@
+--- a/round_div16.sv
++++ b/round_div16.sv
+@@ -4,5 +4,8 @@
+   input  logic [11:0] x,
+   output logic [8:0]  q
+ );
+-  assign q = (x + 8) >> 4;
++  // Widen to 13 bits so x + 8 cannot overflow (max 4095 + 8 = 4103).
++  logic [12:0] sum;
++  assign sum = {1'b0, x} + 13'd8;
++  assign q = sum[12:4];
+ endmodule

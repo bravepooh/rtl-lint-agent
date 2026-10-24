@@ -1,0 +1,11 @@
+--- a/bcd_counter.sv
++++ b/bcd_counter.sv
+@@ -16,4 +16,8 @@
+     end
+   end
+   assign wrap = en && (digit == 9);
++
++  // dbg_en is intentionally unused for now; consume it so it is not reported as unused.
++  logic unused_dbg_en;
++  assign unused_dbg_en = &{1'b0, dbg_en};
+ endmodule

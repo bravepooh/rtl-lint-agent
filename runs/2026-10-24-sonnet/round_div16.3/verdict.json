@@ -1,0 +1,10 @@
+{
+ "top": "round_div16",
+ "checks": {
+  "lint": "fail"
+ },
+ "warnings_before": 1,
+ "warnings_after": 1,
+ "verdict": "rejected",
+ "reason": "introduced new warning types: UNUSEDSIGNAL"
+}

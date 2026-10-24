@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+sim_build/
+results*.xml
+*.vcd
+*.fst
+obj_dir/
+formal/*_prove/
+formal/*_cover/
+.env
+*.env

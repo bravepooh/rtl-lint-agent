@@ -1,0 +1,14 @@
+--- a/avg2.sv
++++ b/avg2.sv
+@@ -7,8 +7,10 @@
+   output logic [7:0] avg
+ );
+   logic [8:0] sum;
++  always_comb begin
++    sum = {1'b0, a} + {1'b0, b};
++  end
+   always_ff @(posedge clk) begin
+-    sum = a + b;
+     avg <= sum[8:1];
+   end
+ endmodule

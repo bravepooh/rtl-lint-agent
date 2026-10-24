@@ -1,0 +1,10 @@
+--- a/edge_det.sv
++++ b/edge_det.sv
+@@ -11,6 +11,6 @@
+     else        prev <= sig;
+   end
+   always_comb begin
+-    pulse <= sig & ~prev;
++    pulse = sig & ~prev;
+   end
+ endmodule

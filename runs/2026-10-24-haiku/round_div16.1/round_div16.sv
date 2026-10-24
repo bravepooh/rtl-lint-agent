@@ -1,0 +1,11 @@
+// Divide a 12-bit value by 16, rounding half up: q = floor((x + 8) / 16). Range 0..256, so q is
+// 9 bits. Every input value is legal, including the top of the range.
+module round_div16 (
+  input  logic [11:0] x,
+  output logic [8:0]  q
+);
+  // Widen to 13 bits so x + 8 cannot overflow (max 4095 + 8 = 4103).
+  logic [12:0] sum;
+  assign sum = {1'b0, x} + 13'd8;
+  assign q = sum[12:4];
+endmodule

@@ -1,0 +1,10 @@
+--- a/seg7.sv
++++ b/seg7.sv
+@@ -16,6 +16,7 @@
+       4'd7: seg = 7'b0000111;
+       4'd8: seg = 7'b1111111;
+       4'd9: seg = 7'b1101111;
++      default: seg = 7'b0000000; // inputs 10..15 never occur; any value is acceptable
+     endcase
+   end
+ endmodule

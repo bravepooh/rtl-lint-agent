@@ -1,0 +1,14 @@
+{
+ "top": "signed_mac",
+ "checks": {
+  "lint": "pass",
+  "waivers": "pass",
+  "ports": "pass",
+  "tests": "pass",
+  "equivalence": "proven"
+ },
+ "warnings_before": 1,
+ "warnings_after": 0,
+ "verdict": "kept",
+ "reason": "lint improved, interface unchanged, tests pass, formally equivalent"
+}

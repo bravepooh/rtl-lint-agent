@@ -1,0 +1,14 @@
+--- a/prio_enc.sv
++++ b/prio_enc.sv
+@@ -7,9 +7,10 @@
+ );
+   always_comb begin
+     valid = 1'b0;
++    idx   = 3'd0;
+     for (int i = 7; i >= 0; i--) begin
+       if (req[i]) begin
+-        idx   = i;
++        idx   = 3'(i);
+         valid = 1'b1;
+       end
+     end

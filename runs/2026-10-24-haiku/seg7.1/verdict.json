@@ -1,0 +1,15 @@
+{
+ "top": "seg7",
+ "checks": {
+  "lint": "pass",
+  "waivers": "pass",
+  "ports": "pass",
+  "tests": "pass",
+  "equivalence": "not proven"
+ },
+ "warnings_before": 2,
+ "warnings_after": 0,
+ "verdict": "review",
+ "reason": "tests pass but formal equivalence not proven: behavior changed somewhere the tests do not check",
+ "equiv_log": "Warning: Latch inferred for signal `\\seg7.\\seg' from process `\\seg7.$proc$/var/folders/hx/c7c0mftn6wb_jsr0khywq8ch0000gn/T/tmpmn2fsxbz/gold.sv:7$1': $auto$proc_dlatch.cc:559:proc_dlatch$78\nERROR: Found 7 unproven $equiv cells in 'equiv_status -assert'."
+}

@@ -1,0 +1,12 @@
+--- a/pipe_delay.sv
++++ b/pipe_delay.sv
+@@ -7,7 +7,7 @@
+ );
+   logic [3:0] s1;
+   always_ff @(posedge clk) begin
+-    q  = s1;
+-    s1 = d;
++    q  <= s1;
++    s1 <= d;
+   end
+ endmodule

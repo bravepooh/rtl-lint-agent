@@ -1,0 +1,14 @@
+{
+ "top": "pipe_delay",
+ "checks": {
+  "lint": "pass",
+  "waivers": "pass",
+  "ports": "pass",
+  "tests": "pass",
+  "equivalence": "proven"
+ },
+ "warnings_before": 2,
+ "warnings_after": 0,
+ "verdict": "kept",
+ "reason": "lint improved, interface unchanged, tests pass, formally equivalent"
+}
