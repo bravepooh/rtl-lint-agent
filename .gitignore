@@ -7,5 +7,6 @@ results*.xml
 obj_dir/
 formal/*_prove/
 formal/*_cover/
+formal/*/
 .env
 *.env
