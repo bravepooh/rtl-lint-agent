@@ -3,12 +3,15 @@
 create_clock -name wclk -period 2.0 [get_ports wclk]
 create_clock -name rclk -period 3.1 [get_ports rclk]
 
-# The clocks have no phase relationship. Every path between them goes through a two-flop
-# synchronizer on a Gray-coded pointer, so the timer must not try to time them.
-set_clock_groups -asynchronous -group [get_clocks wclk] -group [get_clocks rclk]
-
-# But the Gray pointer bits must still arrive close together, or the synchronizer can capture a
-# mix of old and new bits. Bound the skew across the bus to less than one destination period.
+# The clocks have no phase relationship. Every path between them is a Gray-coded pointer into a
+# two-flop synchronizer. Do not time those paths as synchronous, but do not cut them either: the
+# Gray bits must arrive close together, or the synchronizer can capture a mix of old and new bits.
+# Bound each crossing's datapath to the faster clock's period. -datapath_only leaves clock skew out
+# of the check, since it means nothing between unrelated clocks.
+#
+# set_clock_groups -asynchronous and set_false_path are deliberately not used here: both take
+# precedence over set_max_delay and would leave the pointer bus unconstrained. Tools with a direct
+# bus-skew check (Vivado set_bus_skew) can bound the skew across the pointer bits as well.
 set_max_delay -datapath_only 2.0 -from [get_clocks wclk] -to [get_clocks rclk]
 set_max_delay -datapath_only 2.0 -from [get_clocks rclk] -to [get_clocks wclk]
 

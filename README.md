@@ -24,7 +24,7 @@ All tools are open source: Verilator, Yosys, Icarus Verilog, SymbiYosys, cocotb.
 | [`rtl/sync_fifo.sv`](rtl/sync_fifo.sv) | Extra-MSB pointers for full/empty, first-word fall-through | 4 cocotb tests (3,000 random cycles, full and empty both hit). 7 SVA properties proven by k-induction, 2 covers reached |
 | [`rtl/sync_2ff.sv`](rtl/sync_2ff.sv) | Single-bit clock domain crossing | Lint-clean, used as the pattern inside the async FIFO |
 | [`rtl/async_fifo.sv`](rtl/async_fifo.sv) | Gray-coded pointers crossing two unrelated clocks, pessimistic full/empty | 2 cocotb tests, fast-writer and fast-reader, every word checked in order |
-| [`constraints/`](constraints/) | SDC for both, including `set_clock_groups -asynchronous` and a bounded skew on the Gray bus | Commented, line by line |
+| [`constraints/`](constraints/) | SDC for both. The Gray-coded crossings are bounded with `set_max_delay -datapath_only`, not cut with clock groups | Commented, line by line |
 | [`lint-gallery/`](lint-gallery/) | 12 minimal files, one per lint rule, each with why the rule matters | CI checks every file still triggers its rule |
 
 **The checks were themselves checked.** Each was run against a deliberately broken design:
@@ -34,7 +34,7 @@ All tools are open source: Verilator, Yosys, Icarus Verilog, SymbiYosys, cocotb.
 | `sync_fifo` accepts a push while full | Formal: property P2 (occupancy within bounds) fails in the base case |
 | `sync_fifo` reads from the write pointer | Simulation: all 4 tests fail |
 | `async_fifo` full flag compares without inverting the top bits | Simulation: both tests fail (with a timeout, so a stuck flag fails instead of hanging) |
-| `async_fifo` crosses binary pointers instead of Gray | Simulation: 1 of 2 tests fails. Simulation does not model metastability, so this class of bug needs structural CDC checks, not more tests |
+| `async_fifo` crosses binary pointers instead of Gray | Nothing: both tests pass. Simulation does not model metastability, so this class of bug needs structural CDC checks, not more tests |
 
 Lint rule notes, and what lint alone cannot check: [`docs/lint-cheatsheet.md`](docs/lint-cheatsheet.md).
 
